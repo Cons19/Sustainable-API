@@ -1,6 +1,5 @@
 import { Meteor } from "meteor/meteor";
 import { LinksCollection } from "/imports/api/links";
-import url from "url";
 import bodyParser from "body-parser";
 
 async function insertLink({ title, url }) {
@@ -13,16 +12,12 @@ const courses = [
   { id: 3, name: "course3" },
 ];
 
-// Query parameter: /example?param=something
-// Path parameter: /example/1
-// Both: /example/something?param=somethingElse
-
 WebApp.connectHandlers.use(bodyParser.json());
 
 WebApp.connectHandlers.use("/courses", (req, res, next) => {
+  res.setHeader("Content-Type", "application/json");
   switch (req.method) {
     case "GET":
-      res.setHeader("Content-Type", "application/json");
       if (req.url.split("/")[1]) {
         var course = courses.find(
           (c) => c.id === parseInt(req.url.split("/")[1])
@@ -71,6 +66,7 @@ WebApp.connectHandlers.use("/courses", (req, res, next) => {
         res.end(JSON.stringify(course));
       }
       break;
+
     case "DELETE":
       var course = courses.find(
         (c) => c.id === parseInt(req.url.split("/")[1])
@@ -91,7 +87,7 @@ WebApp.connectHandlers.use("/courses", (req, res, next) => {
       break;
   }
 });
-
+/*
 Meteor.startup(async () => {
   // If the Links collection is empty, add some data.
   if ((await LinksCollection.find().countAsync()) === 0) {
@@ -116,3 +112,4 @@ Meteor.startup(async () => {
     });
   }
 });
+*/
