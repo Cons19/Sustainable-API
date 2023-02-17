@@ -1,10 +1,4 @@
-import { Meteor } from "meteor/meteor";
-import { LinksCollection } from "/imports/api/links";
 import bodyParser from "body-parser";
-
-async function insertLink({ title, url }) {
-  await LinksCollection.insertAsync({ title, url, createdAt: new Date() });
-}
 
 const courses = [
   { id: 1, name: "course1" },
@@ -14,7 +8,7 @@ const courses = [
 
 WebApp.connectHandlers.use(bodyParser.json());
 
-WebApp.connectHandlers.use("/courses", (req, res, next) => {
+WebApp.connectHandlers.use("/api/courses", (req, res) => {
   res.setHeader("Content-Type", "application/json");
   switch (req.method) {
     case "GET":
@@ -75,8 +69,12 @@ WebApp.connectHandlers.use("/courses", (req, res, next) => {
         res.writeHead(404);
         res.end("The course with the given ID was not found");
       }
-      var index = courses.indexOf(course);
-      courses.splice(index, 1);
+      const index = courses.findIndex((obj) => obj.id === course.id);
+
+      if (index > -1) {
+        courses.splice(index, 1);
+      }
+
       res.writeHead(200);
       res.end(JSON.stringify(course));
       break;
@@ -87,29 +85,3 @@ WebApp.connectHandlers.use("/courses", (req, res, next) => {
       break;
   }
 });
-/*
-Meteor.startup(async () => {
-  // If the Links collection is empty, add some data.
-  if ((await LinksCollection.find().countAsync()) === 0) {
-    await insertLink({
-      title: "Do the Tutorial",
-      url: "https://www.meteor.com/tutorials/react/creating-an-app",
-    });
-
-    await insertLink({
-      title: "Follow the Guide",
-      url: "https://guide.meteor.com",
-    });
-
-    await insertLink({
-      title: "Read the Docs",
-      url: "https://docs.meteor.com",
-    });
-
-    await insertLink({
-      title: "Discussions",
-      url: "https://forums.meteor.com",
-    });
-  }
-});
-*/
