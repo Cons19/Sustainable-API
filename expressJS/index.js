@@ -11,7 +11,7 @@ let request = new sql.Request(conn);
 app.use(express.json());
 
 app.get("/api/employees", async (req, res) => {
-  await request.query("SELECT TOP 100 * FROM dbo.employees").then((results) => {
+  await request.query("SELECT TOP 10 * FROM dbo.employees").then((results) => {
     if (results.recordset.length == 0) {
       return res.status(404).send("No employees are found");
     }
