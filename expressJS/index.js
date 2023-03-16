@@ -7,66 +7,139 @@ const express = require("express");
 const app = express();
 const sql = require("mssql");
 const conn = getConnection(sqlConfig);
-const query = new sql.Request(conn);
+let request = new sql.Request(conn);
 app.use(express.json());
 
-const courses = [
-  { id: 1, name: "course1" },
-  { id: 2, name: "course2" },
-  { id: 3, name: "course3" },
-];
-
 app.get("/api/employees", async (req, res) => {
-  await query.query("SELECT TOP 100 * FROM dbo.employees").then((results) => {
-    console.log(results.recordset);
-    res.status(200).send(results.recordset);
+  await request.query("SELECT TOP 100 * FROM dbo.employees").then((results) => {
+    if (results.recordset.length == 0) {
+      return res.status(404).send("No employees are found");
+    }
+    return res.status(200).send(results.recordset);
   });
 });
 
-app.get("/api/courses/:id", (req, res) => {
-  const course = courses.find((c) => c.id === parseInt(req.params.id));
-  if (!course)
-    return res.status(404).send("The course with the given ID was not found");
-  return res.status(200).send(course);
+app.get("/api/employees/:id", async (req, res) => {
+  await request
+    .query(
+      "SELECT * FROM dbo.employees WHERE emp_no = " + parseInt(req.params.id)
+    )
+    .then((results) => {
+      if (results.recordset.length == 0) {
+        return res
+          .status(404)
+          .send("The employee with the given ID was not found");
+      }
+      res.status(200).send(results.recordset);
+    });
 });
 
-app.post("/api/courses", (req, res) => {
-  if (!req.body.name || req.body.name.length < 3) {
-    return res
-      .status(400)
-      .send("Name is required and should be minimum 3 characters");
+app.post("/api/employees", async (req, res) => {
+  request = new sql.Request(conn);
+  if (
+    !req.body.birth_date ||
+    !req.body.first_name ||
+    !req.body.last_name ||
+    !req.body.gender ||
+    !req.body.hire_date
+  ) {
+    return res.status(400).send("All fields are required");
   }
-  const course = {
-    id: courses.length + 1,
-    name: req.body.name,
-  };
-  courses.push(course);
-  return res.status(201).send(course);
+  await request
+    .query("SELECT COUNT(*) as total FROM dbo.employees")
+    .then((results) => {
+      let employeeNumber = results.recordset[0].total + 1;
+      const employee = {
+        emp_no: employeeNumber.toString(),
+        birth_date: req.body.birth_date,
+        first_name: req.body.first_name,
+        last_name: req.body.last_name,
+        gender: req.body.gender,
+        hire_date: req.body.hire_date,
+      };
+      request.input("emp_no", sql.BigInt, employee.emp_no);
+      request.input("birth_date", sql.Date, employee.birth_date);
+      request.input("first_name", sql.NVarChar, employee.first_name);
+      request.input("last_name", sql.NVarChar, employee.last_name);
+      request.input("gender", sql.NVarChar, employee.gender);
+      request.input("hire_date", sql.Date, employee.hire_date);
+      request
+        .query(
+          "INSERT INTO dbo.employees VALUES (@emp_no, @birth_date, @first_name, @last_name, @gender, @hire_date)"
+        )
+        .then((results) => {
+          return res.status(201).send(employee);
+        });
+    });
 });
 
-app.put("/api/courses/:id", (req, res) => {
-  const course = courses.find((c) => c.id === parseInt(req.params.id));
-  if (!course)
-    return res.status(404).send("The course with the given ID was not found");
-
-  if (!req.body.name || req.body.name.length < 3) {
-    return res
-      .status(400)
-      .send("Name is required and should be minimum 3 characters");
-  }
-
-  course.name = req.body.name;
-  return res.status(200).send(course);
+app.put("/api/employees/:id", async (req, res) => {
+  request = new sql.Request(conn);
+  await request
+    .query(
+      "SELECT * FROM dbo.employees WHERE emp_no = " + parseInt(req.params.id)
+    )
+    .then((results) => {
+      if (results.recordset.length == 0) {
+        return res
+          .status(404)
+          .send("The employee with the given ID was not found");
+      }
+      if (
+        !req.body.birth_date ||
+        !req.body.first_name ||
+        !req.body.last_name ||
+        !req.body.gender ||
+        !req.body.hire_date
+      ) {
+        return res.status(400).send("All fields are required");
+      }
+      const employee = {
+        emp_no: req.params.id,
+        birth_date: req.body.birth_date,
+        first_name: req.body.first_name,
+        last_name: req.body.last_name,
+        gender: req.body.gender,
+        hire_date: req.body.hire_date,
+      };
+      console.log(employee);
+      request.input("emp_no", sql.BigInt, req.params.id);
+      request.input("birth_date", sql.Date, employee.birth_date);
+      request.input("first_name", sql.NVarChar, employee.first_name);
+      request.input("last_name", sql.NVarChar, employee.last_name);
+      request.input("gender", sql.NVarChar, employee.gender);
+      request.input("hire_date", sql.Date, employee.hire_date);
+      request
+        .query(
+          "UPDATE dbo.employees SET birth_date = @birth_date, first_name = @first_name, last_name = @last_name, gender = @gender, hire_date = @hire_date WHERE emp_no = @emp_no"
+        )
+        .then((results) => {
+          console.log(results.recordset);
+          return res.status(204).send(employee);
+        });
+    });
 });
 
-app.delete("/api/courses/:id", (req, res) => {
-  const course = courses.find((c) => c.id === parseInt(req.params.id));
-  if (!course)
-    return res.status(404).send("The course with the given ID was not found");
-
-  const index = courses.indexOf(course);
-  courses.splice(index, 1);
-  return res.status(200).send(course);
+app.delete("/api/employees/:id", async (req, res) => {
+  await request
+    .query(
+      "SELECT * FROM dbo.employees WHERE emp_no = " + parseInt(req.params.id)
+    )
+    .then((results) => {
+      console.log(results.recordset);
+      if (results.recordset.length == 0) {
+        return res
+          .status(404)
+          .send("The employee with the given ID was not found");
+      }
+      request
+        .query(
+          "DELETE FROM dbo.employees WHERE emp_no = " + parseInt(req.params.id)
+        )
+        .then((results) => {
+          return res.status(200).send(results.recordset);
+        });
+    });
 });
 
 app.listen(3000, () => {
