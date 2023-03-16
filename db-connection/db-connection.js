@@ -18,28 +18,21 @@ const sqlConfig = {
   },
 };
 
-function getCustomers() {
+function getConnection(config) {
   // Create connection instance
-  var conn = new sql.ConnectionPool(sqlConfig);
-
+  const conn = new sql.ConnectionPool(config);
   conn
     .connect()
     // Successfull connection
-    .then(function (con) {
+    .then(function () {
       // Create request instance, passing in connection instance
-      var req = new sql.Request(conn);
-
-      // Call mssql's query method passing in params
-      req.query("SELECT * FROM dbo.departments").then((results) => {
-        // all `int` columns will return a manipulated value as per the callback above
-        console.log(results.recordset);
-      });
     })
     // Handle connection errors
     .catch(function (err) {
       console.log(err);
       conn.close();
     });
+    return conn;
 }
 
-getCustomers();
+module.exports = { getConnection, sqlConfig };

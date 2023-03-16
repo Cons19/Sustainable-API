@@ -1,6 +1,13 @@
+require("dotenv").config({ path: "../db-connection/.env" });
+const {
+  getConnection,
+  sqlConfig,
+} = require("../db-connection/db-connection.js");
 const express = require("express");
 const app = express();
-
+const sql = require("mssql");
+const conn = getConnection(sqlConfig);
+const query = new sql.Request(conn);
 app.use(express.json());
 
 const courses = [
@@ -9,8 +16,11 @@ const courses = [
   { id: 3, name: "course3" },
 ];
 
-app.get("/api/courses", (req, res) => {
-  res.status(200).send(courses);
+app.get("/api/employees", async (req, res) => {
+  await query.query("SELECT TOP 100 * FROM dbo.employees").then((results) => {
+    console.log(results.recordset);
+    res.status(200).send(results.recordset);
+  });
 });
 
 app.get("/api/courses/:id", (req, res) => {
@@ -53,7 +63,7 @@ app.delete("/api/courses/:id", (req, res) => {
   const course = courses.find((c) => c.id === parseInt(req.params.id));
   if (!course)
     return res.status(404).send("The course with the given ID was not found");
-  
+
   const index = courses.indexOf(course);
   courses.splice(index, 1);
   return res.status(200).send(course);
