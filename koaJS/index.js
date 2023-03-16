@@ -12,4 +12,6 @@ let courses = require("./courses.js");
 // use the routes
 app.use(courses.routes());
 
-app.listen(3003);
+app.listen(3003, function(){
+    console.log("KoaJS server running...");
+ });
