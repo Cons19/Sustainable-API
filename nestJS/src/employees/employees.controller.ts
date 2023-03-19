@@ -1,14 +1,14 @@
 import {
-  Controller,
-  Post,
   Body,
-  Get,
-  Put,
+  Controller,
   Delete,
+  Get,
   Param,
+  Post,
+  Put,
 } from '@nestjs/common';
-import { EmployeesService } from './employees.service';
 import { Employee } from './employee.entity';
+import { EmployeesService } from './employees.service';
 
 @Controller('api/employees')
 export class EmployeesController {

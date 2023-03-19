@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { query } from 'express';
 import { Repository } from 'typeorm';
 import { Employee } from './employee.entity';
 
@@ -19,20 +18,21 @@ export class EmployeesService {
       take: 10,
     });
     */
-    let queryString = 'SELECT TOP 10 * FROM dbo.employees';
+    const queryString = 'SELECT TOP 10 * FROM dbo.employees';
     return this.employeeRepository.query(queryString);
   }
 
   findOne(id: number) {
-    let queryString = 'SELECT * FROM dbo.employees WHERE emp_no = ' + id['id'];
+    const queryString =
+      'SELECT * FROM dbo.employees WHERE emp_no = ' + id['id'];
     return this.employeeRepository.query(queryString);
   }
 
   create(employee: Employee) {
-    let queryFindTotal = 'SELECT COUNT(*) as total FROM dbo.employees';
+    const queryFindTotal = 'SELECT COUNT(*) as total FROM dbo.employees';
     this.employeeRepository.query(queryFindTotal).then(function (results) {
       employee.emp_no = Number(results[0]['total']) + 1;
-      let queryString = `INSERT INTO dbo.employees VALUES ('${employee.emp_no}', '${employee.birth_date}', '${employee.first_name}', 
+      const queryString = `INSERT INTO dbo.employees VALUES ('${employee.emp_no}', '${employee.birth_date}', '${employee.first_name}', 
       '${employee.last_name}', '${employee.gender}', '${employee.hire_date}');`;
       console.log(queryString);
       // unseen here
