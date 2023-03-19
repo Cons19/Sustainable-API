@@ -7,11 +7,13 @@ const app = new Koa();
 app.use(koaBody());
 
 // Require the routers
-let courses = require("./courses.js");
+const employees = require("./employees.js");
+const departments = require("./departments.js");
 
 // use the routes
-app.use(courses.routes());
+app.use(employees.routes());
+app.use(departments.routes());
 
-app.listen(3003, function(){
-    console.log("KoaJS server running...");
- });
+app.listen(3003, function () {
+  console.log("KoaJS server running on port 3003!");
+});
