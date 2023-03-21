@@ -48,6 +48,7 @@ router.get("/:id", async (ctx, next) => {
 });
 
 router.post("/", async (ctx, next) => {
+  request = new sql.Request(conn);
   await request
     .query("SELECT TOP 1 * FROM dbo.departments ORDER BY dept_no DESC")
     .then(async (lastDepartment) => {

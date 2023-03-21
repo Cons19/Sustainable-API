@@ -46,6 +46,7 @@ router.get("/:id", async (ctx, next) => {
 });
 
 router.post("/", async (ctx, next) => {
+  request = new sql.Request(conn);
   if (
     !ctx.request.body.birth_date ||
     !ctx.request.body.first_name ||
@@ -101,6 +102,7 @@ router.post("/", async (ctx, next) => {
 });
 
 router.put("/:id", async (ctx, next) => {
+  request = new sql.Request(conn);
   await request
     .query(`SELECT * FROM dbo.employees WHERE emp_no = ${ctx.params.id}`)
     .then(async (results) => {
