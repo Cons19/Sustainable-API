@@ -14,7 +14,7 @@ app.get("/api/employees", async (req, res) => {
   await request.query("SELECT TOP 10 * FROM dbo.employees").then((results) => {
     if (results.recordset.length == 0) {
       return res.status(404).send({
-        error: "No employees are found",
+        error: "No employees are found!",
       });
     }
     return res.status(200).send(results.recordset);
@@ -62,10 +62,42 @@ app.post("/api/employees", async (req, res) => {
         hire_date: req.body.hire_date,
       };
 
-      if (employee.gender !== "M" && employee.gender !== "F") {
+      if (!isValidDate(employee.birth_date)) {
+        res.status(400).send({
+          error:
+            "A new employee could not be created! The birth_date is invalid!",
+          details: "Birth date must have the format yyyy-mm-dd!",
+        });
+      } else if (
+        employee.first_name.length < 2 ||
+        employee.first_name.length > 14
+      ) {
+        res.status(400).send({
+          error:
+            "A new employee could not be created! The first_name is invalid!",
+          details:
+            "First name must have at least 2 characters and at most 14 characters!",
+        });
+      } else if (
+        employee.last_name.length < 2 ||
+        employee.last_name.length > 16
+      ) {
+        res.status(400).send({
+          error:
+            "A new employee could not be created! The last_name is invalid!",
+          details:
+            "Last name must have at least 2 characters and at most 16 characters!",
+        });
+      } else if (employee.gender !== "M" && employee.gender !== "F") {
         res.status(400).send({
           error: "A new employee could not be created! The gender is invalid!",
           details: "Gender must be either 'M' or 'F'!",
+        });
+      } else if (!isValidDate(employee.hire_date)) {
+        res.status(400).send({
+          error:
+            "A new employee could not be created! The hire_date is invalid!",
+          details: "Hire date must have the format yyyy-mm-dd!",
         });
       } else {
         request.input("emp_no", sql.BigInt, employee.emp_no);
@@ -116,19 +148,57 @@ app.put("/api/employees/:id", async (req, res) => {
         gender: req.body.gender,
         hire_date: req.body.hire_date,
       };
-      request.input("emp_no", sql.BigInt, req.params.id);
-      request.input("birth_date", sql.Date, employee.birth_date);
-      request.input("first_name", sql.NVarChar, employee.first_name);
-      request.input("last_name", sql.NVarChar, employee.last_name);
-      request.input("gender", sql.NVarChar, employee.gender);
-      request.input("hire_date", sql.Date, employee.hire_date);
-      request
-        .query(
-          "UPDATE dbo.employees SET birth_date = @birth_date, first_name = @first_name, last_name = @last_name, gender = @gender, hire_date = @hire_date WHERE emp_no = @emp_no"
-        )
-        .then(() => {
-          return res.status(200).send(employee);
+
+      if (!isValidDate(employee.birth_date)) {
+        res.status(400).send({
+          error:
+            "The employee could not be updated! The birth_date is invalid!",
+          details: "Birth date must have the format yyyy-mm-dd!",
         });
+      } else if (
+        employee.first_name.length < 2 ||
+        employee.first_name.length > 14
+      ) {
+        res.status(400).send({
+          error:
+            "The employee could not be updated! The first_name is invalid!",
+          details:
+            "First name must have at least 2 characters and at most 14 characters!",
+        });
+      } else if (
+        employee.last_name.length < 2 ||
+        employee.last_name.length > 16
+      ) {
+        res.status(400).send({
+          error: "The employee could not be updated! The last_name is invalid!",
+          details:
+            "Last name must have at least 2 characters and at most 16 characters!",
+        });
+      } else if (employee.gender !== "M" && employee.gender !== "F") {
+        res.status(400).send({
+          error: "The employee could not be updated! The gender is invalid!",
+          details: "Gender must be either 'M' or 'F'!",
+        });
+      } else if (!isValidDate(employee.hire_date)) {
+        res.status(400).send({
+          error: "The employee could not be updated! The hire_date is invalid!",
+          details: "Hire date must have the format yyyy-mm-dd!",
+        });
+      } else {
+        request.input("emp_no", sql.BigInt, req.params.id);
+        request.input("birth_date", sql.Date, employee.birth_date);
+        request.input("first_name", sql.NVarChar, employee.first_name);
+        request.input("last_name", sql.NVarChar, employee.last_name);
+        request.input("gender", sql.NVarChar, employee.gender);
+        request.input("hire_date", sql.Date, employee.hire_date);
+        request
+          .query(
+            "UPDATE dbo.employees SET birth_date = @birth_date, first_name = @first_name, last_name = @last_name, gender = @gender, hire_date = @hire_date WHERE emp_no = @emp_no"
+          )
+          .then(() => {
+            return res.status(200).send(employee);
+          });
+      }
     });
 });
 
@@ -144,7 +214,7 @@ app.delete("/api/employees/:id", async (req, res) => {
       request
         .query(`DELETE FROM dbo.employees WHERE emp_no = ${req.params.id}`)
         .then(() => {
-          return res.status(204);
+          return res.status(204).send();
         });
     });
 });
@@ -247,6 +317,11 @@ app.delete("/api/departments/:id", async (req, res) => {
         });
     });
 });
+
+function isValidDate(dateString) {
+  const regEx = /^\d{4}-\d{2}-\d{2}$/;
+  return dateString.match(regEx) != null;
+}
 
 function createDepartmentName(length) {
   let result = "";

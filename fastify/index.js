@@ -62,12 +62,44 @@ fastify.post("/api/employees", async (request, reply) => {
           gender: request.body.gender,
           hire_date: request.body.hire_date,
         };
-        // TODO: add date validation, first name and last name length validation
-        if (newEmployee.gender !== "M" && newEmployee.gender !== "F") {
+
+        if (!isValidDate(newEmployee.birth_date)) {
+          reply.code(400).send({
+            error:
+              "A new employee could not be created! The birth_date is invalid!",
+            details: "Birth date must have the format yyyy-mm-dd!",
+          });
+        } else if (
+          newEmployee.first_name.length < 2 ||
+          newEmployee.first_name.length > 14
+        ) {
+          reply.code(400).send({
+            error:
+              "A new employee could not be created! The first_name is invalid!",
+            details:
+              "First name must have at least 2 characters and at most 14 characters!",
+          });
+        } else if (
+          newEmployee.last_name.length < 2 ||
+          newEmployee.last_name.length > 16
+        ) {
+          reply.code(400).send({
+            error:
+              "A new employee could not be created! The last_name is invalid!",
+            details:
+              "Last name must have at least 2 characters and at most 16 characters!",
+          });
+        } else if (newEmployee.gender !== "M" && newEmployee.gender !== "F") {
           reply.code(400).send({
             error:
               "A new employee could not be created! The gender is invalid!",
             details: "Gender must be either 'M' or 'F'!",
+          });
+        } else if (!isValidDate(newEmployee.hire_date)) {
+          reply.code(400).send({
+            error:
+              "A new employee could not be created! The hire_date is invalid!",
+            details: "Hire date must have the format yyyy-mm-dd!",
           });
         } else {
           req.input("emp_no", sql.BigInt, newEmployee.emp_no);
@@ -120,8 +152,34 @@ fastify.put("/api/employees/:id", async (request, reply) => {
             gender: request.body.gender,
             hire_date: request.body.hire_date,
           };
-          // TODO: add date validation, first name and last name length validation
-          if (
+
+          if (!isValidDate(updatedEmployee.birth_date)) {
+            reply.code(400).send({
+              error:
+                "The employee could not be updated! The birth_date is invalid!",
+              details: "Birth date must have the format yyyy-mm-dd!",
+            });
+          } else if (
+            updatedEmployee.first_name.length < 2 ||
+            updatedEmployee.first_name.length > 14
+          ) {
+            reply.code(400).send({
+              error:
+                "The employee could not be updated! The first_name is invalid!",
+              details:
+                "First name must have at least 2 characters and at most 14 characters!",
+            });
+          } else if (
+            updatedEmployee.last_name.length < 2 ||
+            updatedEmployee.last_name.length > 16
+          ) {
+            reply.code(400).send({
+              error:
+                "The employee could not be updated! The last_name is invalid!",
+              details:
+                "Last name must have at least 2 characters and at most 16 characters!",
+            });
+          } else if (
             updatedEmployee.gender !== "M" &&
             updatedEmployee.gender !== "F"
           ) {
@@ -129,6 +187,12 @@ fastify.put("/api/employees/:id", async (request, reply) => {
               error:
                 "The employee could not be updated! The gender is invalid!",
               details: "Gender must be either 'M' or 'F'!",
+            });
+          } else if (!isValidDate(updatedEmployee.hire_date)) {
+            reply.code(400).send({
+              error:
+                "The employee could not be updated! The hire_date is invalid!",
+              details: "Hire date must have the format yyyy-mm-dd!",
             });
           } else {
             req.input("emp_no", sql.BigInt, updatedEmployee.emp_no);
@@ -282,6 +346,11 @@ fastify.delete("/api/departments/:id", async (request, reply) => {
       }
     });
 });
+
+function isValidDate(dateString) {
+  const regEx = /^\d{4}-\d{2}-\d{2}$/;
+  return dateString.match(regEx) != null;
+}
 
 function createDepartmentName(length) {
   let result = "";
