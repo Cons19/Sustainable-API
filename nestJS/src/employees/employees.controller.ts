@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
   Param,
   Post,
   Put,
@@ -15,28 +16,28 @@ export class EmployeesController {
   constructor(private service: EmployeesService) {}
 
   @Get()
-  getUsers() {
-    return this.service.findAll();
+  async getAllEmployees() {
+    return await this.service.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param() id: number) {
-    return this.service.findOne(id);
+  @Get(':emp_no')
+  async getEmployee(@Param('emp_no') emp_no: string) {
+    return await this.service.findOne(Number(emp_no));
   }
 
   @Post()
   async create(@Body() employee: Employee) {
-    const response = await this.service.create(employee);
+    return await this.service.create(employee);
   }
 
   @Put(':emp_no')
-  async update(@Param() id: number, @Body() employee: Employee) {
-    const response = await this.service.update(id, employee);
-    return response;
+  async update(@Param('emp_no') id: number, @Body() employee: Employee) {
+    return await this.service.update(id, employee);
   }
 
-  @Delete(':id')
-  delete(@Param() id: number) {
-    return this.service.remove(id);
+  @Delete(':emp_no')
+  @HttpCode(204)
+  async delete(@Param('emp_no') emp_no: number) {
+    return await this.service.remove(emp_no);
   }
 }
