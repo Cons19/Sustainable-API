@@ -203,11 +203,12 @@ export class EmployeesService {
             HttpStatus.BAD_REQUEST,
           );
         } else {
-          await this.employeeRepository.update(emp_no, employee);
-          const updatedEmployee = await this.employeeRepository.findOne({
-            where: { emp_no },
-          });
+          const updatedEmployee = {
+            emp_no,
+            ...employee,
+          };
 
+          await this.employeeRepository.update(emp_no, employee);
           return updatedEmployee;
         }
       }

@@ -26,18 +26,21 @@ export class EmployeesController {
   }
 
   @Post()
-  async create(@Body() employee: Employee) {
+  async createEmployee(@Body() employee: Employee) {
     return await this.service.create(employee);
   }
 
   @Put(':emp_no')
-  async update(@Param('emp_no') id: number, @Body() employee: Employee) {
-    return await this.service.update(id, employee);
+  async updateEmployee(
+    @Param('emp_no') emp_no: number,
+    @Body() employee: Employee,
+  ) {
+    return await this.service.update(emp_no, employee);
   }
 
   @Delete(':emp_no')
   @HttpCode(204)
-  async delete(@Param('emp_no') emp_no: number) {
+  async deleteEmployee(@Param('emp_no') emp_no: number) {
     return await this.service.remove(emp_no);
   }
 }
