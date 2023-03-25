@@ -313,7 +313,7 @@ app.delete("/api/departments/:id", async (req, res) => {
       request
         .query(`DELETE FROM dbo.departments WHERE dept_no = '${req.params.id}'`)
         .then(() => {
-          return res.status(204);
+          return res.status(204).send();
         });
     });
 });
