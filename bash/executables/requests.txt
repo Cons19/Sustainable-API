@@ -1,0 +1,40 @@
+http://localhost:3000/api/employees
+http://localhost:3000/api/employees/490000
+-H Content-Type:application/json --request POST --data @createEmployeeBody.json http://localhost:3000/api/employees
+-H Content-Type:application/json --request PUT --data @updateEmployeeBody.json http://localhost:3000/api/employees/500000
+--request DELETE http://localhost:3000/api/employees/500000
+http://localhost:3000/api/departments
+http://localhost:3000/api/departments/d009
+-H Content-Type:application/json --request POST --data @departmentsBody.json http://localhost:3000/api/departments
+-H Content-Type:application/json --request PUT --data @departmentsBody.json http://localhost:3000/api/departments/d010
+--request DELETE http://localhost:3000/api/departments/d010
+http://localhost:3001/api/employees
+http://localhost:3001/api/employees/490000
+-H Content-Type:application/json --request POST --data @createEmployeeBody.json http://localhost:3001/api/employees
+-H Content-Type:application/json --request PUT --data @updateEmployeeBody.json http://localhost:3001/api/employees/500000
+--request DELETE http://localhost:3001/api/employees/500000
+http://localhost:3001/api/departments
+http://localhost:3001/api/departments/d009
+-H Content-Type:application/json --request POST --data @departmentsBody.json http://localhost:3001/api/departments
+-H Content-Type:application/json --request PUT --data @departmentsBody.json http://localhost:3001/api/departments/d010
+--request DELETE http://localhost:3001/api/departments/d010
+http://localhost:3002/api/employees
+http://localhost:3002/api/employees/490000
+-H Content-Type:application/json --request POST --data @createEmployeeBody.json http://localhost:3002/api/employees
+-H Content-Type:application/json --request PUT --data @updateEmployeeBody.json http://localhost:3002/api/employees/500000
+--request DELETE http://localhost:3002/api/employees/500000
+http://localhost:3002/api/departments
+http://localhost:3002/api/departments/d009
+-H Content-Type:application/json --request POST --data @departmentsBody.json http://localhost:3002/api/departments
+-H Content-Type:application/json --request PUT --data @departmentsBody.json http://localhost:3002/api/departments/d010
+--request DELETE http://localhost:3002/api/departments/d010
+http://localhost:3003/api/employees
+http://localhost:3003/api/employees/490000
+-H Content-Type:application/json --request POST --data @createEmployeeBody.json http://localhost:3003/api/employees
+-H Content-Type:application/json --request PUT --data @updateEmployeeBody.json http://localhost:3003/api/employees/500000
+--request DELETE http://localhost:3003/api/employees/500000
+http://localhost:3003/api/departments
+http://localhost:3003/api/departments/d009
+-H Content-Type:application/json --request POST --data @departmentsBody.json http://localhost:3003/api/departments
+-H Content-Type:application/json --request PUT --data @departmentsBody.json http://localhost:3003/api/departments/d010
+--request DELETE http://localhost:3003/api/departments/d010
