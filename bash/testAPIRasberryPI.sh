@@ -8,19 +8,19 @@
 		  
 		for file in $1
 		do 
-			for i in {1..3}
+			for i in 1 2 3
 			do
-				for j in {1..3}
+				for j in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30
 				do
 					while IFS= read -r line; do
 							echo "\nCurl command: curl" $line
 							curl $line
-							sleep 5
+							sleep 60
 					done < $file
 					echo "\n--------------------------------: j:"$j
 				done
 				echo "\n================================: i:"$i 
-				sleep 60
+				sleep 300
 			done
 			echo "[$(date)]" >> $LOGFILE		
 		done
@@ -33,7 +33,7 @@
 	echo "[$(date)]" >> $LOGFILE
 
 	# Express
-	sleep 60
+	sleep 300
 	run_files "executables/express/employees.txt"
 	run_files "executables/express/departments.txt"
 	# Nest
