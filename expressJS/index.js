@@ -10,6 +10,24 @@ const conn = getConnection(sqlConfig);
 let request = new sql.Request(conn);
 app.use(express.json());
 
+app.get("/api/fibonacci", async (req, res) => {
+  const intervalId = setInterval(function () {
+    let a = 0,
+      b = 1,
+      f = 1;
+    for (let i = 2; i <= 100; i++) {
+      f = a + b;
+      a = b;
+      b = f;
+    }
+  }, 0);
+
+  setTimeout(function () {
+    clearInterval(intervalId);
+    return res.status(200).send("fibonacci");
+  }, 60000 * 5);
+});
+
 app.get("/api/employees", async (req, res) => {
   await request.query("SELECT TOP 10 * FROM dbo.employees").then((results) => {
     if (results.recordset.length == 0) {

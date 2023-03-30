@@ -1,0 +1,5 @@
+http://localhost:3001/api/employees
+http://localhost:3001/api/employees/490000
+-H Content-Type:application/json --request POST --data @createEmployeeBody.json http://localhost:3001/api/employees
+-H Content-Type:application/json --request PUT --data @updateEmployeeBody.json http://localhost:3001/api/employees/500000
+--request DELETE http://localhost:3001/api/employees/500000

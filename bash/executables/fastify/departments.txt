@@ -1,0 +1,5 @@
+http://localhost:3002/api/departments
+http://localhost:3002/api/departments/d009
+-H Content-Type:application/json --request POST --data @departmentsBody.json http://localhost:3002/api/departments
+-H Content-Type:application/json --request PUT --data @departmentsBody.json http://localhost:3002/api/departments/d010
+--request DELETE http://localhost:3002/api/departments/d010
