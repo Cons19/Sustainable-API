@@ -365,7 +365,10 @@ function createDepartmentName(length) {
   return result;
 }
 
-fastify.listen({ port: 3002 }, (err, address) => {
+
+fastify.listen({ port: 3002, host: '0.0.0.0'}, (err, address) => {
   if (err) throw err;
   console.log(`Server is now listening on ${address}`);
 });
+
+//fastify.listen(3002, '0.0.0.0');
