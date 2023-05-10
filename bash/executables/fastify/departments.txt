@@ -1,5 +1,5 @@
 http://10.20.82.158:3002/api/departments
 http://10.20.82.158:3002/api/departments/d009
--H Content-Type:application/json --request POST --data @departmentsBody.json http://10.20.82.158:3002/api/departments
--H Content-Type:application/json --request PUT --data @departmentsBody.json http://10.20.82.158:3002/api/departments/d010
+-H Content-Type:application/json --request POST --data @createDepartmentBody.json http://10.20.82.158:3002/api/departments
+-H Content-Type:application/json --request PUT --data @updateDepartmentBody.json http://10.20.82.158:3002/api/departments/d010
 --request DELETE http://10.20.82.158:3002/api/departments/d010
