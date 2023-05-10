@@ -49,30 +49,54 @@ router.get("/:id", async (ctx, next) => {
 
 router.post("/", async (ctx, next) => {
   request = new sql.Request(conn);
-  await request
-    .query("SELECT TOP 1 * FROM dbo.departments ORDER BY dept_no DESC")
-    .then(async (lastDepartment) => {
-      const getNumberFromString = parseInt(
-        lastDepartment.recordset[0].dept_no.replace(/[^\d.]/g, "")
-      );
-      const newDepartmentNumber =
-        "d" + String(getNumberFromString + 1).padStart(3, "0");
-      const randomDepartmentName = createDepartmentName(50);
+  if (!ctx.request.body.dept_name) {
+    ctx.status = 400;
+    ctx.body = {
+      error: "A new department could not be created! All fields are required!",
+      details: "Please provide the dept_name of the new department!",
+    };
+  } else {
+    await request
+      .query(
+        `SELECT * FROM dbo.departments WHERE dept_name = '${ctx.request.body.dept_name}'`
+      )
+      .then(async (departments) => {
+        if (departments.recordset.length !== 0) {
+          ctx.status = 400;
+          ctx.body = {
+            error:
+              "The department could not be created! The dept_name is invalid!",
+            details: "The dept_name already exists!",
+          };
+        } else {
+          await request
+            .query("SELECT TOP 1 * FROM dbo.departments ORDER BY dept_no DESC")
+            .then(async (lastDepartment) => {
+              const getNumberFromString = parseInt(
+                lastDepartment.recordset[0].dept_no.replace(/[^\d.]/g, "")
+              );
+              const newDepartmentNumber =
+                "d" + String(getNumberFromString + 1).padStart(3, "0");
 
-      const newDepartment = {
-        dept_no: newDepartmentNumber,
-        dept_name: randomDepartmentName,
-      };
+              const newDepartment = {
+                dept_no: newDepartmentNumber,
+                dept_name: ctx.request.body.dept_name,
+              };
 
-      request.input("dept_no", sql.NVarChar, newDepartment.dept_no);
-      request.input("dept_name", sql.NVarChar, newDepartment.dept_name);
-      await request
-        .query("INSERT INTO dbo.departments VALUES (@dept_no, @dept_name)")
-        .then(() => {
-          ctx.status = 201;
-          ctx.body = newDepartment;
-        });
-    });
+              request.input("dept_no", sql.NVarChar, newDepartment.dept_no);
+              request.input("dept_name", sql.NVarChar, newDepartment.dept_name);
+              await request
+                .query(
+                  "INSERT INTO dbo.departments VALUES (@dept_no, @dept_name)"
+                )
+                .then(() => {
+                  ctx.status = 201;
+                  ctx.body = newDepartment;
+                });
+            });
+        }
+      });
+  }
   next();
 });
 
@@ -86,22 +110,46 @@ router.put("/:id", async (ctx, next) => {
         ctx.body = {
           error: `The department with the ID ${ctx.params.id} was not found!`,
         };
-      } else {
-        let randomDepartmentName = createDepartmentName(50);
-
-        const updatedDepartment = {
-          dept_no: ctx.params.id,
-          dept_name: randomDepartmentName,
+      } else if (!ctx.request.body.dept_name) {
+        ctx.status = 400;
+        ctx.body = {
+          error:
+            "The department could not be updated! All fields are required!",
+          details: "Please provide the dept_name of the department!",
         };
-        request.input("dept_no", sql.NVarChar, updatedDepartment.dept_no);
-        request.input("dept_name", sql.NVarChar, updatedDepartment.dept_name);
+      } else {
         await request
           .query(
-            "UPDATE dbo.departments SET dept_name = @dept_name WHERE dept_no = @dept_no"
+            `SELECT * FROM dbo.departments WHERE dept_name = '${ctx.request.body.dept_name}' AND dept_no != '${ctx.params.id}'`
           )
-          .then(() => {
-            ctx.status = 200;
-            ctx.body = updatedDepartment;
+          .then(async (departments) => {
+            if (departments.recordset.length !== 0) {
+              ctx.status = 400;
+              ctx.body = {
+                error:
+                  "The department could not be updated! The dept_name is invalid!",
+                details: "The dept_name already exists!",
+              };
+            } else {
+              const updatedDepartment = {
+                dept_no: ctx.params.id,
+                dept_name: ctx.request.body.dept_name,
+              };
+              request.input("dept_no", sql.NVarChar, updatedDepartment.dept_no);
+              request.input(
+                "dept_name",
+                sql.NVarChar,
+                updatedDepartment.dept_name
+              );
+              await request
+                .query(
+                  "UPDATE dbo.departments SET dept_name = @dept_name WHERE dept_no = @dept_no"
+                )
+                .then(() => {
+                  ctx.status = 200;
+                  ctx.body = updatedDepartment;
+                });
+            }
           });
       }
     });
@@ -129,18 +177,5 @@ router.delete("/:id", async (ctx, next) => {
     });
   next();
 });
-
-function createDepartmentName(length) {
-  let result = "";
-  const characters =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  const charactersLength = characters.length;
-  let counter = 0;
-  while (counter < length) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    counter += 1;
-  }
-  return result;
-}
 
 module.exports = router;

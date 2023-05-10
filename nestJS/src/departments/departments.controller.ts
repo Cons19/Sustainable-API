@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   Delete,
   Get,
@@ -8,6 +9,7 @@ import {
   Put,
 } from '@nestjs/common';
 import { DepartmentsService } from './departments.service';
+import { Department } from './department.entity';
 
 @Controller('api/departments')
 export class DepartmentsController {
@@ -24,13 +26,16 @@ export class DepartmentsController {
   }
 
   @Post()
-  async createDepartment() {
-    return await this.service.create();
+  async createDepartment(@Body() department: Department) {
+    return await this.service.create(department);
   }
 
   @Put(':dept_no')
-  async updateDepartment(@Param('dept_no') dept_no: string) {
-    return await this.service.update(dept_no);
+  async updateDepartment(
+    @Param('dept_no') dept_no: string,
+    @Body() department: Department,
+  ) {
+    return await this.service.update(dept_no, department);
   }
 
   @Delete(':dept_no')
