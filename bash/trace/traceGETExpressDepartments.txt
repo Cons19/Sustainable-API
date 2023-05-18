@@ -1,0 +1,38 @@
+== Info:   Trying 127.0.0.1:3000...
+== Info: Connected to localhost (127.0.0.1) port 3000 (#0)
+=> Send header, 124 bytes (0x7c)
+0000: GET /api/departments HTTP/1.1
+001f: Host: localhost:3000
+0035: User-Agent: curl/7.87.0
+004e: Accept: */*
+005b: Content-Type:application/json
+007a: 
+== Info: Mark bundle as not supporting multiuse
+<= Recv header, 17 bytes (0x11)
+0000: HTTP/1.1 200 OK
+<= Recv header, 23 bytes (0x17)
+0000: X-Powered-By: Express
+<= Recv header, 47 bytes (0x2f)
+0000: Content-Type: application/json; charset=utf-8
+<= Recv header, 21 bytes (0x15)
+0000: Content-Length: 451
+<= Recv header, 43 bytes (0x2b)
+0000: ETag: W/"1c3-daqRe2k3W5sglzWrg4fv0Q4FEqo"
+<= Recv header, 37 bytes (0x25)
+0000: Date: Thu, 18 May 2023 08:50:22 GMT
+<= Recv header, 24 bytes (0x18)
+0000: Connection: keep-alive
+<= Recv header, 23 bytes (0x17)
+0000: Keep-Alive: timeout=5
+<= Recv header, 2 bytes (0x2)
+0000: 
+<= Recv data, 451 bytes (0x1c3)
+0000: [{"dept_no":"d001","dept_name":"Marketing"},{"dept_no":"d002","d
+0040: ept_name":"Finance"},{"dept_no":"d003","dept_name":"Human Resour
+0080: ces"},{"dept_no":"d004","dept_name":"Production"},{"dept_no":"d0
+00c0: 05","dept_name":"Development"},{"dept_no":"d006","dept_name":"Qu
+0100: ality Management"},{"dept_no":"d007","dept_name":"Sales"},{"dept
+0140: _no":"d008","dept_name":"Research"},{"dept_no":"d009","dept_name
+0180: ":"Customer Service"},{"dept_no":"d010","dept_name":"Engineering
+01c0: "}]
+== Info: Connection #0 to host localhost left intact

@@ -1,0 +1,34 @@
+== Info:   Trying 127.0.0.1:3000...
+== Info: Connected to localhost (127.0.0.1) port 3000 (#0)
+=> Send header, 145 bytes (0x91)
+0000: POST /api/departments HTTP/1.1
+0020: Host: localhost:3000
+0036: User-Agent: curl/7.87.0
+004f: Accept: */*
+005c: Content-Type:application/json
+007b: Content-Length: 30
+008f: 
+=> Send data, 30 bytes (0x1e)
+0000: {  "dept_name": "Engineering"}
+== Info: Mark bundle as not supporting multiuse
+<= Recv header, 22 bytes (0x16)
+0000: HTTP/1.1 201 Created
+<= Recv header, 23 bytes (0x17)
+0000: X-Powered-By: Express
+<= Recv header, 47 bytes (0x2f)
+0000: Content-Type: application/json; charset=utf-8
+<= Recv header, 20 bytes (0x14)
+0000: Content-Length: 44
+<= Recv header, 42 bytes (0x2a)
+0000: ETag: W/"2c-7SaWUt+A125d4125n3KXxiz7Mfo"
+<= Recv header, 37 bytes (0x25)
+0000: Date: Thu, 18 May 2023 08:40:15 GMT
+<= Recv header, 24 bytes (0x18)
+0000: Connection: keep-alive
+<= Recv header, 23 bytes (0x17)
+0000: Keep-Alive: timeout=5
+<= Recv header, 2 bytes (0x2)
+0000: 
+<= Recv data, 44 bytes (0x2c)
+0000: {"dept_no":"d010","dept_name":"Engineering"}
+== Info: Connection #0 to host localhost left intact

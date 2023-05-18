@@ -1,0 +1,51 @@
+== Info:   Trying 127.0.0.1:3003...
+== Info: Connected to localhost (127.0.0.1) port 3003 (#0)
+=> Send header, 122 bytes (0x7a)
+0000: GET /api/employees HTTP/1.1
+001d: Host: localhost:3003
+0033: User-Agent: curl/7.87.0
+004c: Accept: */*
+0059: Content-Type:application/json
+0078: 
+== Info: Mark bundle as not supporting multiuse
+<= Recv header, 17 bytes (0x11)
+0000: HTTP/1.1 200 OK
+<= Recv header, 47 bytes (0x2f)
+0000: Content-Type: application/json; charset=utf-8
+<= Recv header, 22 bytes (0x16)
+0000: Content-Length: 1560
+<= Recv header, 37 bytes (0x25)
+0000: Date: Thu, 18 May 2023 09:15:14 GMT
+<= Recv header, 24 bytes (0x18)
+0000: Connection: keep-alive
+<= Recv header, 23 bytes (0x17)
+0000: Keep-Alive: timeout=5
+<= Recv header, 2 bytes (0x2)
+0000: 
+<= Recv data, 1560 bytes (0x618)
+0000: [{"emp_no":"10001","birth_date":"1953-09-02T00:00:00.000Z","firs
+0040: t_name":"Georgi","last_name":"Facello","gender":"M","hire_date":
+0080: "1986-06-26T00:00:00.000Z"},{"emp_no":"10002","birth_date":"1964
+00c0: -06-02T00:00:00.000Z","first_name":"Bezalel","last_name":"Simmel
+0100: ","gender":"F","hire_date":"1985-11-21T00:00:00.000Z"},{"emp_no"
+0140: :"10003","birth_date":"1959-12-03T00:00:00.000Z","first_name":"P
+0180: arto","last_name":"Bamford","gender":"M","hire_date":"1986-08-28
+01c0: T00:00:00.000Z"},{"emp_no":"10004","birth_date":"1954-05-01T00:0
+0200: 0:00.000Z","first_name":"Chirstian","last_name":"Koblick","gende
+0240: r":"M","hire_date":"1986-12-01T00:00:00.000Z"},{"emp_no":"10005"
+0280: ,"birth_date":"1955-01-21T00:00:00.000Z","first_name":"Kyoichi",
+02c0: "last_name":"Maliniak","gender":"M","hire_date":"1989-09-12T00:0
+0300: 0:00.000Z"},{"emp_no":"10006","birth_date":"1953-04-20T00:00:00.
+0340: 000Z","first_name":"Anneke","last_name":"Preusig","gender":"F","
+0380: hire_date":"1989-06-02T00:00:00.000Z"},{"emp_no":"10007","birth_
+03c0: date":"1957-05-23T00:00:00.000Z","first_name":"Tzvetan","last_na
+0400: me":"Zielinski","gender":"F","hire_date":"1989-02-10T00:00:00.00
+0440: 0Z"},{"emp_no":"10008","birth_date":"1958-02-19T00:00:00.000Z","
+0480: first_name":"Saniya","last_name":"Kalloufi","gender":"M","hire_d
+04c0: ate":"1994-09-15T00:00:00.000Z"},{"emp_no":"10009","birth_date":
+0500: "1952-04-19T00:00:00.000Z","first_name":"Sumant","last_name":"Pe
+0540: ac","gender":"F","hire_date":"1985-02-18T00:00:00.000Z"},{"emp_n
+0580: o":"10010","birth_date":"1963-06-01T00:00:00.000Z","first_name":
+05c0: "Duangkaew","last_name":"Piveteau","gender":"F","hire_date":"198
+0600: 9-08-24T00:00:00.000Z"}]
+== Info: Connection #0 to host localhost left intact

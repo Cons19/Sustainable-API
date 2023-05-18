@@ -1,0 +1,36 @@
+== Info:   Trying 127.0.0.1:3000...
+== Info: Connected to localhost (127.0.0.1) port 3000 (#0)
+=> Send header, 144 bytes (0x90)
+0000: POST /api/employees HTTP/1.1
+001e: Host: localhost:3000
+0034: User-Agent: curl/7.87.0
+004d: Accept: */*
+005a: Content-Type:application/json
+0079: Content-Length: 115
+008e: 
+=> Send data, 115 bytes (0x73)
+0000: {."birth_date": "1998-01-01",."first_name": "Niels",."last_name"
+0040: : "Bohr",."gender": "M",."hire_date": "2023-01-01"}
+== Info: Mark bundle as not supporting multiuse
+<= Recv header, 22 bytes (0x16)
+0000: HTTP/1.1 201 Created
+<= Recv header, 23 bytes (0x17)
+0000: X-Powered-By: Express
+<= Recv header, 47 bytes (0x2f)
+0000: Content-Type: application/json; charset=utf-8
+<= Recv header, 21 bytes (0x15)
+0000: Content-Length: 121
+<= Recv header, 42 bytes (0x2a)
+0000: ETag: W/"79-LnnVrgu0otN8OeY9KISlUONKjkc"
+<= Recv header, 37 bytes (0x25)
+0000: Date: Thu, 18 May 2023 08:04:01 GMT
+<= Recv header, 24 bytes (0x18)
+0000: Connection: keep-alive
+<= Recv header, 23 bytes (0x17)
+0000: Keep-Alive: timeout=5
+<= Recv header, 2 bytes (0x2)
+0000: 
+<= Recv data, 121 bytes (0x79)
+0000: {"emp_no":500000,"birth_date":"1998-01-01","first_name":"Niels",
+0040: "last_name":"Bohr","gender":"M","hire_date":"2023-01-01"}
+== Info: Connection #0 to host localhost left intact
